@@ -1,301 +1,190 @@
-# SKILL: doggie_banner_factory_pt
+---
+name: doggie-banner-factory
+description: >
+  Cria banners hero de alta conversão para a loja Shopify da Doggie (petshop premium de Lisboa)
+  e para campanhas promocionais. Gera JSON pronto a importar no NanoBanana — APENAS fundo, animal
+  e gradiente, com zona limpa reservada — e entrega à parte a copy (headline, subheadline, oferta, CTA)
+  para overlay manual no Canva com as fontes reais da marca e o logo PNG real.
+  Produz sempre versão desktop (1920×800) e mobile (1080×1350).
 
-## Objetivo
+  ACIONAR quando o utilizador pedir: banner, banner Shopify, hero, banner de homepage, banner de campanha,
+  arte de promoção para o site, banner desktop/mobile, banner de Black Friday/Natal/Verão/aniversário,
+  banner de portes grátis, banner de lançamento de produto. Também: "cria um banner", "faz um hero",
+  "gera o banner da campanha", "preciso de um banner para o site".
 
-Gerar automaticamente campanhas completas de banner para a loja Shopify da Doggie.
+  NÃO usar para posts de Instagram/stories/reels — esses vão para o skill doggie-content-factory.
+---
 
-Esta skill funciona como um estúdio criativo de marketing, produzindo:
+# Doggie Banner Factory
 
-- conceito de campanha
-- copy para banners
-- prompts para geração de imagem por IA
-- orientações de layout
-- versões desktop e mobile
-- variações A/B
+Banners hero para Shopify, em **duas camadas**:
 
-O objetivo é criar hero banners para Shopify de alta conversão, consistentes com a identidade visual da Doggie.
+1. **Camada IA (NanoBanana):** fundo + animal + gradiente da marca, com **zona limpa** reservada para o texto. Sem texto. Sem logo.
+2. **Camada Canva (manual):** headline, subheadline, oferta, CTA e o **logo PNG real** por cima, com as fontes reais.
+
+> **Porquê assim:** a IA não reproduz fielmente o logo Doggie nem tipografia de marca. Texto gerado por IA sai com erros, acentos partidos e fontes erradas. Por isso o texto e o logo entram sempre em pós-produção no Canva. Isto é regra, não preferência.
 
 ---
 
-# Contexto da Marca
+## 1. Referência da Marca
 
-Doggie é uma loja premium para animais de estimação localizada em Lisboa.
+```
+NOME:        Doggie — much more than a pet
+LOJA ONLINE: store.doggie.pt  (ATIVA — linkar produtos/coleções reais)
+LOJA FÍSICA: Av. Óscar Monteiro Torres 29C, 1000-215 Lisboa
+CONTACTO:    +351 911 030 615 · info@doggie.pt
+```
 
-Público-alvo:
+**Gradiente principal:** `#4B0C62 → #92278F → #DA1C5C → #EE2A7B → #F15A29`
 
-Proprietários de animais que:
+| Cor | HEX | Uso |
+|-----|-----|-----|
+| Roxo profundo | `#4B0C62` | Âncora do gradiente, fundos escuros |
+| Magenta | `#92278F` | Transição |
+| Crimson | `#DA1C5C` | Acentos, botão CTA |
+| Pink | `#EE2A7B` | Destaques |
+| Laranja | `#F15A29` | Glow, sparkle ✦, energia |
 
-- tratam os seus animais como família
-- valorizam produtos de qualidade
-- apreciam experiências premium
-- estão dispostos a investir no bem-estar dos seus animais
+**Tipografia (no Canva, não no prompt):**
+- Headline → **Indigo Regular**
+- Tagline / apoio → **Caviar Dreams**
 
-A comunicação deve transmitir:
-
-- calor humano
-- confiança
-- alegria
-- ligação emocional com os animais
-
----
-
-# Identidade Visual
-
-Os banners devem seguir o estilo Doggie.
-
-### Cores principais
-
-Roxo
-Rosa
-Laranja
-
-Aplicação típica:
-
-- fundos em gradiente
-- acentos com glow
-- botões CTA com gradiente
+**Mascote:** French Bulldog com óculos quadrados oversized. *Não pedir à IA para reproduzir o logo* — usar cães/gatos reais na fotografia e sobrepor o logo PNG depois.
 
 ---
 
-# Tom Emocional
+## 2. O que vai no prompt vs. o que vai no Canva
 
-As cenas devem transmitir:
+| Vai no prompt NanoBanana | Vai no Canva (depois) |
+|---|---|
+| Fotografia do animal (cão, gato, etc.) | Headline (Indigo Regular) |
+| Iluminação, cenário, mood | Subheadline (Caviar Dreams) |
+| Gradiente da marca (glow/zona) | Oferta / badge de desconto |
+| **Zona limpa** vazia para texto | Botão CTA |
+| Profundidade, qualidade editorial | **Logo PNG real** |
+| — | Código promocional |
 
-- felicidade
-- celebração
-- afeição entre donos e animais
-- ambientes acolhedores
-- momentos de brincadeira
-
-Os animais devem parecer:
-
-- expressivos
-- saudáveis
-- alegres
-- amigáveis
+❌ **Nunca no prompt:** texto, palavras, números, percentagens, logo, wordmark "doggie", tagline, watermark.
 
 ---
 
-# Estilo de Layout
+## 3. Tamanhos e zonas seguras
 
-Estrutura preferida:
+### Desktop — 1920×800
+- Composição: **animal à esquerda, zona limpa à direita** para o texto.
+- Zona de texto: terço direito (~640 px de largura útil).
 
-Desktop:
+### Mobile — 1080×1350
+- Composição: **animal em baixo/centro, zona limpa em cima** para o texto.
+- Zona de texto: terço superior.
 
-ESQUERDA  
-Imagem hero
-
-DIREITA  
-Conteúdo de texto
-
-Mobile:
-
-TOPO  
-Headline
-
-CENTRO  
-Animais ou produto
-
-FUNDO  
-Botão CTA
+Gerar **sempre os dois**.
 
 ---
 
-# Tamanhos de Banner
+## 4. JSON NanoBanana — estrutura de output
 
-## Desktop
+Parâmetros fixos: `model: flux-2-pro`, `steps: 44`, `guidance: 9.5`.
+(Como **não há texto na imagem**, mantém-se 9.5 — não é preciso subir para 10.)
 
-1920 × 800 px
+Acentos removidos das palavras PT dentro do `prompt` (mantidos só na copy do Canva).
 
-Zona segura de conteúdo:
-1200 px central
-
-Composição:
-imagem à esquerda  
-texto à direita
-
----
-
-## Mobile
-
-1080 × 1350 px
-
-Composição:
-
-texto centrado  
-animais ou produto abaixo
-
----
-
-# Parâmetros de Entrada
-
-O utilizador pode fornecer:
-
-Campanha (tipo)
-Promoção
-Produto
-Cupão
-Estação
-Oferta
-CTA
-
-Exemplos:
-
-Black Friday
-Campanha de Natal
-Aniversário da loja
-Envio grátis
-Lançamento de produto
+```json
+{
+  "banner_desktop": {
+    "model": "flux-2-pro",
+    "steps": 44,
+    "guidance": 9.5,
+    "width": 1920,
+    "height": 800,
+    "aspect_ratio": "21:9",
+    "prompt": "[fundo + animal + gradiente + ZONA LIMPA — ver secção 5]",
+    "negative_prompt": "[ver secção 6]"
+  },
+  "banner_mobile": {
+    "model": "flux-2-pro",
+    "steps": 44,
+    "guidance": 9.5,
+    "width": 1080,
+    "height": 1350,
+    "aspect_ratio": "4:5",
+    "prompt": "[mesma cena, composicao vertical, ZONA LIMPA em cima]",
+    "negative_prompt": "[ver secção 6]"
+  }
+}
+```
 
 ---
 
-# Estrutura de Saída
+## 5. Template de prompt (sem texto, sem logo)
 
-A skill deve devolver os seguintes blocos:
-
-- Conceito de Campanha
-- Copy do Banner (Headline, Subheadline, Oferta, CTA)
-- Prompt de Imagem — Desktop
-- Prompt de Imagem — Mobile
-- Guia de Layout (posicionamento dos elementos)
-- Variações A/B (pelo menos 2 alternativas)
-
----
-
-# Banner Copy
-
-Campos esperados:
-
-Headline  
-Subheadline  
-Oferta  
-CTA
-
-Exemplo:
-
-Headline
-Um Natal cheio de mimo para o teu patudo
-
-Subheadline
-Presentes especiais para quem está sempre ao teu lado
-
-Oferta
--10% em produtos selecionados
-
-CTA
-Ver presentes de Natal
+```
+Premium pet brand hero banner background, [formato] composition.
+[ANIMAL]: a [raca] [expressao: happy/relaxed/playful], [posicao no frame],
+healthy and well-groomed, looking at camera, professional advertising photography.
+[ILUMINACAO]: [ex: warm golden-hour side light / bright clean studio light].
+[CENARIO]: [ex: soft Mediterranean summer garden bokeh / cozy living room blur].
+[GRADIENTE]: brand gradient glow of deep purple, magenta and orange (#4B0C62, #92278F, #DA1C5C, #EE2A7B, #F15A29)
+flowing softly across the [zona], luminous but subtle, not covering the animal.
+[ZONA LIMPA]: large empty negative space on the [direita / topo] of the frame,
+clean and uncluttered, reserved for text overlay, nothing in this area.
+[QUALIDADE]: ultra realistic, cinematic, shallow depth of field, 8k,
+award-winning advertising photography.
+```
 
 ---
 
-# Prompt de Imagem — Desktop
+## 6. Negative prompt padrão
 
-Gere um prompt detalhado para geração de imagem contendo:
-
-- cena
-- iluminação
-- animais (espécies / atitudes)
-- composição (espaço negativo para texto quando necessário)
-- cores (incluir acentos de marca: roxo/rosa/laranja)
-- mood visual
-- colocação do(s) produto(s)
-- qualidade técnica (cinematic lighting, soft depth of field, high realism)
-
-Exemplo de estrutura:
-
-premium pet lifestyle scene, cozy living room with warm lights and soft textures, a joyful golden retriever interacting with owner, premium pet products artfully placed near the pet, purple-pink-[...]
+```
+text, words, letters, numbers, percentages, captions, labels, watermark, logo,
+wordmark, brand name, tagline, typography, poster layout, frame, border,
+deformed animal, extra limbs, bad anatomy, ugly, blurry, low quality,
+oversaturated, harsh shadows, cluttered background, busy composition,
+people, human hands, cheap stock photo
+```
 
 ---
 
-# Prompt de Imagem — Mobile
+## 7. Regras de copy (camada Canva, PT-PT)
 
-Adaptar o prompt para composição vertical, com os animais/produto(s) centralizados e espaço superior para o headline.
+- **Registo "tu"** sempre.
+- **Proibido "patudo".** Usar: "o teu cão", "o teu gato", "o teu animal", "o teu companheiro".
+- Copy curta, emocional, orientada ao benefício.
+- **Regra legal "ATÉ":** em badges de desconto variável, "ATÉ" aparece sempre por cima da percentagem (ex: `ATÉ\n-50%`). Em desconto fixo (ex: -15%), não usar "ATÉ".
+- **CTA padrão:** `COMPRAR AGORA` ou `APROVEITAR A PROMOÇÃO`.
+- Botão CTA: fundo `#DA1C5C` ou gradiente roxo→laranja, texto branco.
+- Se houver código promo, mostrar o código (ex: `VERAO15`) e validade.
 
-Exemplo:
-
-same premium pet lifestyle scene but vertical composition, pets centered, cozy background, space above for headline, purple-pink-orange glow accents, studio lighting, soft depth of field, ultra r[...]
-
----
-
-# Guia de Layout
-
-Descrever onde cada elemento deve aparecer na arte:
-
-- Headline: posição (ex.: top right / top center)
-- Subheadline: abaixo do headline
-- Oferta: próxima ao texto principal, com destaque visual
-- CTA button: posição e estilo (gradiente roxo→laranja, sombra suave, padding generoso)
-- Imagem/Animais: lado esquerdo (desktop) ou centro (mobile)
-- Zona segura: manter todo o texto dentro dos 1200 px centrais (desktop)
+### Exemplos de copy (já sem "patudo")
+- Headline: `Um verão fresco para o teu cão`
+- Subheadline: `Hidratação, snacks gelados e segurança em viagem`
+- Oferta: `-15% com o código VERAO15`
+- CTA: `APROVEITAR A PROMOÇÃO`
 
 ---
 
-# Variações A/B
+## 8. Estrutura de output (o que entregar sempre)
 
-Gerar pelo menos duas variações que alterem o foco criativo:
-
-Variação A: foco na emoção (ex.: momentos afetivos entre dono e animal)
-Variação B: foco na oferta (ex.: destaque ao desconto / cupões)
-Variação C (opcional): foco no produto (ex.: close-up do produto em uso)
-
-Para cada variação, fornecer: conceito curto, headline alternativo, subheadline e CTA alternativos, e pequenas mudanças no prompt de imagem/layout.
-
----
-
-# Estilo de CTA
-
-Botões CTA devem usar:
-
-gradiente roxo → laranja
-
-Exemplos de textos de CTA:
-
-Ver ofertas
-Comprar agora
-Descobrir coleção
-Ver campanha
+1. **Conceito da campanha** — 1-2 linhas da ideia criativa.
+2. **Copy para o Canva** — headline, subheadline, oferta, CTA (PT-PT, regras da secção 7).
+3. **JSON NanoBanana desktop** (1920×800).
+4. **JSON NanoBanana mobile** (1080×1350).
+5. **Guia de layout Canva** — onde fica cada elemento + cor do CTA + recordar logo PNG real na zona limpa.
+6. **Variações A/B de copy:**
+   - A — foco emoção
+   - B — foco desconto/urgência
 
 ---
 
-# Requisitos de Qualidade de Imagem
+## 9. Checklist antes de entregar
 
-Todos os prompts devem incluir e reforçar as seguintes qualidades técnicas e visuais:
-
-- cinematic lighting
-- soft depth of field
-- high realism
-- expressive animals
-- premium product placement
-- brand color glow accents
-- warm festive mood when relevant
-
-Palavras-chave recomendadas:
-
-premium pet lifestyle
-festive atmosphere
-cozy environment
-studio lighting
-clean composition
-brand color gradients
-
----
-
-# Padrão de Qualidade
-
-As imagens geradas e os banners finais devem parecer:
-
-- campanhas profissionais de e-commerce
-- marcas premium para animais de estimação
-- secções hero de homepage para Shopify
-
----
-
-# Saída Final
-
-A skill deve entregar, por campanha solicitada:
-
-- Conceito de campanha (texto)
-- Copy completo do banner (headline, subheadline, oferta, CTA)
-- Prompt de imagem para Desktop (detalhado)
-- Prompt de imagem para Mobile (detalhado)
-- Guia de layout (instruções de posicionamento)
-- 2–3 variações A/B prontas para teste
+- [ ] Prompt **não** contém texto, números nem logo
+- [ ] `negative_prompt` exclui texto/logo/watermark
+- [ ] Zona limpa reservada e indicada (direita no desktop, topo no mobile)
+- [ ] `flux-2-pro`, steps 44, guidance 9.5
+- [ ] Acentos removidos no prompt
+- [ ] Copy em PT-PT, "tu", **sem "patudo"**
+- [ ] Regra "ATÉ" aplicada se desconto variável
+- [ ] Desktop **e** mobile gerados
+- [ ] Guia Canva lembra logo PNG real + fontes Indigo/Caviar Dreams
